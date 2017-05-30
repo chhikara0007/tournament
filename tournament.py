@@ -7,7 +7,7 @@
 import psycopg2
 
 def connect():
-    """Connect to the PostgreSQL database.  Returns a database connection."""
+    """"Connect to the PostgreSQL database.  Returns a database connection."""
     try:
         return psycopg2.connect(dbname="tournament")
     except:
@@ -124,3 +124,4 @@ def swissPairings():
         results.append([player1[0], player1[1], player2[0], player2[1]])
 
     return results
+    
