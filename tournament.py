@@ -7,11 +7,11 @@
 import psycopg2
 
 def connect():
-    """Connect to the PostgreSQL database.  Returns a database connection."""
+    """"Connect to the PostgreSQL database.  Returns a database connection."""
     try:
         return psycopg2.connect(dbname="tournament")
     except:
-        print 'Unable to connect to database.  See REEADME.txt'
+        print('Unable to connect to database.  See Github README file')
 
 def deleteMatches():
     """Remove all the match records from the database."""
@@ -74,24 +74,18 @@ def playerStandings():
     conn = connect()
     db_cursor = conn.cursor()
     # could have made this a VIEW, but just did the table JOINs in the function
-    query = """SELECT p.id, p.name, SUM(CASE WHEN m.winner = p.id THEN 1 ELSE 0 END) wins, COUNT(*) total
-	       FROM players p JOIN matches m
-	       ON m.winner = p.id OR m.loser = p.id
-	       GROUP BY p.id, p.name
-	       ORDER BY 3 DESC;"""
+    query = """SELECT p.id, p.name,
+            (SELECT count(*) FROM
+            matches WHERE matches.winner = p.id) as wins,
+            (SELECT count(*) FROM
+            matches WHERE p.id in (winner, loser)) as total
+            FROM players p
+            GROUP BY p.id
+            ORDER BY wins DESC;"""
     db_cursor.execute(query)
     results = db_cursor.fetchall()
-
-    if len(results) > 0:
-        conn.close()
-        return results
-    else:
-        # return default result array if no matches have been played
-        query = "SELECT id, name, 0 wins, 0 total FROM players;"
-        db_cursor.execute(query)
-        default_results = db_cursor.fetchall()
-        conn.close()
-        return default_results
+    conn.close()
+    return results
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -130,3 +124,4 @@ def swissPairings():
         results.append([player1[0], player1[1], player2[0], player2[1]])
 
     return results
+    
