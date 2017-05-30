@@ -1,6 +1,10 @@
 # tournament
 Udacity Intro to Programming Back-End Project Submission
 
+1. From the /vagrant/tournament$ folder type "psql" to connect to the database.
+2. Type "\i tournament.sql" to create the database.
+3. With another terminal run "python tournament_test.sql" to run all of the tests or use the "\q" command to exist psql and  run "python tournament_test.sql" from the same terminal window.
+
 Tournament Results: Getting Started
 
 In this project, you will be writing a Python module that uses the PostgreSQL database to keep track of players and matches in a game tournament.
