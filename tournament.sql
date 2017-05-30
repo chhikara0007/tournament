@@ -5,6 +5,7 @@ DROP DATABASE IF EXISTS tournament;
 
 CREATE DATABASE tournament;
 
+-- connects to the tournament database, drops connection to previous database
 \c tournament
 
 -- Create players Table
